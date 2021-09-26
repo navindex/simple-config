@@ -20,8 +20,7 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
-        "ext-mbstring": "*"
+        "php": "^7.3|^8.0"
     },
     "require-dev": {
         "larapack/dd": "^1.1",
