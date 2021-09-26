@@ -2,7 +2,7 @@
 
 [![Unit tests](https://github.com/navindex/simple-config/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/navindex/simple-config/actions/workflows/test.yml)
 [![Code analysis](https://github.com/navindex/simple-config/actions/workflows/analysis.yml/badge.svg)](https://github.com/navindex/simple-config/actions/workflows/analysis.yml)
-[![Build Status](https://img.shields.io/travis/navindex/simple-config?branch=master)](https://app.travis-ci.com/navindex/simple-config)
+[![Build Status](https://app.travis-ci.com/navindex/simple-config.svg?branch=master)](https://app.travis-ci.com/navindex/simple-config)
 [![Coverage Status](https://coveralls.io/repos/github/navindex/simple-config/badge.svg?branch=master)](https://coveralls.io/github/navindex/simple-config?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue)](https://opensource.org/licenses/MIT)
 
