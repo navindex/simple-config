@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Navindex\SimpleConfig\Tests;
 
 use ArrayIterator;
-use Exception;
 use Iterator;
 use Navindex\SimpleConfig\Config;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 /**
  * @covers \Navindex\SimpleConfig\Config
@@ -54,7 +52,7 @@ final class ConfigTest extends TestCase
      *
      * @return void
      */
-    public function testUnset(array $config, string $key, array $expected)
+    public function testUnset(?array $config, string $key, array $expected)
     {
         $c = new Config($config);
         $this->assertEquals($expected, $c->unset($key)->toArray());
@@ -70,7 +68,7 @@ final class ConfigTest extends TestCase
      *
      * @return void
      */
-    public function testGet(array $config, string $key, $default, $expected)
+    public function testGet(?array $config, string $key, $default, $expected)
     {
         $c = new Config($config);
         $this->assertEquals($expected, $c->get($key, $default));
@@ -85,7 +83,7 @@ final class ConfigTest extends TestCase
      *
      * @return void
      */
-    public function testHas(array $config, string $key, bool $expected)
+    public function testHas(?array $config, string $key, bool $expected)
     {
         $c = new Config($config);
         $this->assertEquals($expected, $c->has($key));
@@ -101,7 +99,7 @@ final class ConfigTest extends TestCase
      *
      * @return void
      */
-    public function testAppend(array $config, string $key, $value, array $expected)
+    public function testAppend(?array $config, string $key, $value, array $expected)
     {
         $c = new Config($config);
         $this->assertEquals($expected, $c->append($key, $value)->toArray());
@@ -117,7 +115,7 @@ final class ConfigTest extends TestCase
      *
      * @return void
      */
-    public function testSubtract(array $config, string $key, $value, array $expected)
+    public function testSubtract(?array $config, string $key, $value, array $expected)
     {
         $c = new Config($config);
         $this->assertEquals($expected, $c->subtract($key, $value)->toArray());
@@ -216,7 +214,7 @@ final class ConfigTest extends TestCase
      * @dataProvider providerConfig
      *
      * @param null|mixed[] $config
-     * @param integer      $expected
+     * @param mixed[]      $expected
      *
      * @return void
      */
@@ -271,7 +269,7 @@ final class ConfigTest extends TestCase
      *
      * @return void
      */
-    public function testArrayAccessUnset(array $config, string $key, array $expected)
+    public function testArrayAccessUnset(?array $config, string $key, array $expected)
     {
         $c = new Config($config);
         unset($c[$key]);
@@ -287,7 +285,7 @@ final class ConfigTest extends TestCase
      *
      * @return void
      */
-    public function testArrayAccessGet(array $config, string $key, $expected)
+    public function testArrayAccessGet(?array $config, string $key, $expected)
     {
         $c = new Config($config);
         $this->assertEquals($expected, $c[$key]);
@@ -298,11 +296,11 @@ final class ConfigTest extends TestCase
      *
      * @param null|mixed[] $config
      * @param string       $key
-     * @param bool         $expected
+     * @param boolean      $expected
      *
      * @return void
      */
-    public function testArrayAccessExists(array $config, string $key, bool $expected)
+    public function testArrayAccessExists(?array $config, string $key, bool $expected)
     {
         $c = new Config($config);
         $this->assertEquals($expected, isset($c[$key]));
@@ -355,7 +353,7 @@ final class ConfigTest extends TestCase
     /**
      * Data provider.
      *
-     * @return \Iterator <int, array<string, mixed>>
+     * @return \Iterator <int, mixed>
      */
     public function providerUnset(): Iterator
     {

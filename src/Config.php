@@ -11,6 +11,8 @@ use Traversable;
 
 /**
  * Config class.
+ * @implements \IteratorAggregate<int>
+ * @implements \ArrayAccess<int,int>
  */
 class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 {
@@ -22,14 +24,14 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Configuration settings.
      *
-     * @var array
+     * @var mixed[]
      */
     protected $config = [];
 
     /**
      * Constructor.
      *
-     * @param array|null $config Configuration array
+     * @param null|mixed[] $config Configuration array
      */
     public function __construct(?array $config = null)
     {
@@ -180,14 +182,15 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Merge a config array into this one.
      *
-     * @param array        $config Configuration array
+     * @param mixed[]      $config Configuration array
      * @param null|integer $type   Merge type
      *
      * @return self
      */
-    public function merge(?array $config, ?int $type = self::MERGE_REPLACE): self
+    public function merge(?array $config, ?int $type = null): self
     {
         $config = $config ?? [];
+        $type = $type ?? self::MERGE_REPLACE;
 
         if (self::MERGE_KEEP === $type) {
             $base = $config;
@@ -241,7 +244,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Returns the entire configuration as an array.
      *
-     * @return array
+     * @return mixed[]
      */
     public function toArray(): array
     {
@@ -290,7 +293,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @return \Traversable
+     * @return \Traversable <mixed, int>
      */
     public function getIterator(): Traversable
     {
@@ -330,9 +333,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      *
      * @param mixed $value
      *
-     * @return array
+     * @return mixed[]
      */
-    public static function wrap($value)
+    public static function wrap($value): array
     {
         if (is_null($value)) {
             return [];
@@ -359,11 +362,11 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Returns the keys present in all arrays
      *
-     * @param array $array1
-     * @param array $array2
-     * @param array ...$_
+     * @param mixed[] $array1
+     * @param mixed[] $array2
+     * @param mixed[] ...$_
      *
-     * @return array
+     * @return string[]
      */
     public static function commonKeys(array $array1, array $array2, array ...$_): array
     {
