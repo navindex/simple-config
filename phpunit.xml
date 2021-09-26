@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" backupGlobals="false" backupStaticAttributes="false" colors="true" verbose="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    <coverage includeUncoveredFiles="true" processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+        <report>
+            <clover outputFile="build/logs/clover.xml"/>
+            <html outputDirectory="build/logs/html"/>
+            <php outputFile="build/logs/coverage.serialized"/>
+            <text outputFile="php://stdout" showUncoveredFiles="false"/>
+        </report>
+    </coverage>
+    <testsuites>
+        <testsuite name="HTML Formatter">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <junit outputFile="build/report.junit.xml"/>
+        <testdoxHtml outputFile="build/logs/testdox.html"/>
+        <testdoxText outputFile="build/logs/testdox.txt"/>
+    </logging>
+</phpunit>

@@ -1,0 +1,56 @@
+{
+    "name": "navindex/simple-config",
+    "type": "library",
+    "description": "Simple library to create and modify a configuration structure.",
+    "homepage": "https://github.com/navindex/simple-config",
+    "keywords": [
+        "configuration",
+        "config",
+        "options",
+        "Navindex",
+        "PHP"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Miklos Karpati",
+            "email": "mk@navindex.com.au",
+            "homepage": "https://www.navindex.com.au",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "larapack/dd": "^1.1",
+        "phpstan/phpstan": "^0.12.99",
+        "phpunit/phpunit": "^9.5",
+        "php-coveralls/php-coveralls": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Navindex\\SimpleConfig\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Navindex\\SimpleConfig\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "check": "phpstan analyse",
+        "test": "phpunit"
+    },
+    "scripts-descriptions": {
+        "check": "Run static analysis",
+        "test": "Run unit tests"
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/navindex"
+        }
+    ]
+}
