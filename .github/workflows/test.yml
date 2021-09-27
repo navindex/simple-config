@@ -8,13 +8,14 @@ on:
 
 jobs:
   build:
-    name: PHP ${{ matrix.php-versions }} Unit Tests
-
+    name: ${{ matrix.os }} PHP ${{ matrix.php-versions }} - ${{ matrix.stability }} Tests
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: true
       matrix:
-        php-versions: ['7.3', '7.4', '8.0']
-
-    runs-on: ubuntu-latest
+        os: [ubuntu-latest, windows-latest]
+        php: ['7.3', '7.4', '8.0']
+        stability: [prefer-lowest, prefer-stable]
 
     steps:
       - name: Checkout
@@ -23,12 +24,18 @@ jobs:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php }}
           tools: composer, phpunit
           extensions: intl, json, mbstring, xml
+          coverage: none
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Setup problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+          
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
@@ -42,7 +49,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Run test suite
         run: composer run-script test
@@ -53,7 +60,7 @@ jobs:
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_PARALLEL: true
-          COVERALLS_FLAG_NAME: PHP ${{ matrix.php-versions }}
+          COVERALLS_FLAG_NAME: PHP ${{ matrix.php }}
 
   coveralls:
     needs: [build]
