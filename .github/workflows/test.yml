@@ -27,6 +27,7 @@ jobs:
           php-version: ${{ matrix.php }}
           tools: composer, phpunit
           extensions: intl, json, mbstring, xml
+          coverage: pcov
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
