@@ -54,7 +54,7 @@ jobs:
       - name: Run test suite
         run: composer run-script test
 
-      - if: matrix.php == '8.0' && matrix.os == ubuntu-latest
+      - if: matrix.php == '8.0' && matrix.os == 'ubuntu-latest'
         name: Run Coveralls
         run: vendor/bin/php-coveralls --verbose --coverage_clover=build/logs/clover.xml --json_path build/logs/coveralls-upload.json
         env:
