@@ -741,7 +741,7 @@ final class ConfigTest extends TestCase
                 'ggg' => null,
                 42,
             ],
-            7,
+            12,
         ];
     }
 
