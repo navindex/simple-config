@@ -12,7 +12,7 @@
         </report>
     </coverage>
     <testsuites>
-        <testsuite name="HTML Formatter">
+        <testsuite name="Simple Config">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
