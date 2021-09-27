@@ -61,6 +61,27 @@ $doWeHaveDog = $config->has('dog');
 $arrConfig = $config->toArray();
 ```
 
-## 5. About Navindex
+## 5. Actions
+
+| Method        | Attributes           | Returns | Description                                                    |
+| :------------ | :------------------- | :------ | :------------------------------------------------------------- |
+| _constructor_ | $config              | -       | Constructor                                                    |
+| set           | $key, $value         | self    | Saves a key value.                                             |
+| unset         | $key                 | self    | Completely removes a key.                                      |
+| get           | $key, $default       | mixed   | Retrieves a key value.                                         |
+| has           | $key                 | boolean | Checks if a key exists and not null.                           |
+| append        | $key, $value         | self    | Appends value(s) to an array.                                  |
+| subtract      | $key, $value         | self    | Substract value(s) from an array.                              |
+| merge         | $config, $method     | self    | Merges another config into this one.                           |
+| split         | $key                 | Config  | Splits a sub-array of configuration options into a new config. |
+| toArray       | -                    | array   | Returns the entire configuration as an array.                  |
+| serialize     | -                    | string  | Generates a storable representation of the configuration.      |
+| unserialize   | $data                | -       | Sets the configuration from a stored representation.           |
+| count         | -                    | int     | Counts the config items.                                       |
+| wrap          | $value               | self    | _Static._ If the given value is not an array, wraps it in one. |
+| isAssoc       | $array               | boolean | _Static._ Tests if the array is associative.                   |
+| commonKeys    | $array1, $array2,... | array   | _Static._ Returns the keys present in all arrays.              |
+
+## 6. About Navindex
 
 Navindex is a web development agency in Melbourne, Australia. You'll find an overview of our cmpany [on our website](https://www.navindex.com.au).

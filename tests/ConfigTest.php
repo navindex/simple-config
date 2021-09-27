@@ -124,13 +124,13 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerMerge
      *
-     * @param null|mixed[] $config
-     * @param null|mixed[] $merge
-     * @param mixed[]      $expected
+     * @param null|mixed[]                               $config
+     * @param null|mixed[]|\Navindex\SimpleConfig\Config $merge
+     * @param mixed[]                                    $expected
      *
      * @return void
      */
-    public function testMerge(?array $config, ?array $merge, array $expected)
+    public function testMerge(?array $config, $merge, array $expected)
     {
         $c = new Config($config);
         $this->assertEquals($expected, $c->merge($merge)->toArray());
@@ -139,13 +139,13 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerMerge
      *
-     * @param null|mixed[] $config
-     * @param null|mixed[] $merge
-     * @param mixed[]      $expected
+     * @param null|mixed[]                               $config
+     * @param null|mixed[]|\Navindex\SimpleConfig\Config $merge
+     * @param mixed[]                                    $expected
      *
      * @return void
      */
-    public function testMergeReplace(?array $config, ?array $merge, array $expected)
+    public function testMergeReplace(?array $config, $merge, array $expected)
     {
         $c = new Config($config);
         $this->assertEquals($expected, $c->merge($merge, Config::MERGE_REPLACE)->toArray());
@@ -504,9 +504,18 @@ final class ConfigTest extends TestCase
         yield [[], null, []];
         yield [null, [], []];
         yield [[], [], []];
+        yield [[], new Config(), []];
         yield [
             ['aaa' => ['bbb' => ['ccc' => 'value']]],
             ['ddd' => ['eee' => ['fff' => 'another value']]],
+            [
+                'aaa' => ['bbb' => ['ccc' => 'value']],
+                'ddd' => ['eee' => ['fff' => 'another value']],
+            ],
+        ];
+        yield [
+            ['aaa' => ['bbb' => ['ccc' => 'value']]],
+            new Config(['ddd' => ['eee' => ['fff' => 'another value']]]),
             [
                 'aaa' => ['bbb' => ['ccc' => 'value']],
                 'ddd' => ['eee' => ['fff' => 'another value']],
@@ -545,6 +554,16 @@ final class ConfigTest extends TestCase
                     'eee' => 'just a value',
                 ],
             ],
+        ];
+        yield [
+            [],
+            ['aaa' => ['bbb' => 'value']],
+            ['aaa' => ['bbb' => 'value']],
+        ];
+        yield [
+            ['aaa' => []],
+            ['aaa' => ['bbb' => 'value']],
+            ['aaa' => ['bbb' => 'value']],
         ];
     }
 
@@ -600,6 +619,16 @@ final class ConfigTest extends TestCase
                     'eee' => 'just a value',
                 ],
             ],
+        ];
+        yield [
+            [],
+            ['aaa' => ['bbb' => 'value']],
+            ['aaa' => ['bbb' => 'value']],
+        ];
+        yield [
+            ['aaa' => []],
+            ['aaa' => ['bbb' => 'value']],
+            ['aaa' => ['bbb' => 'value']],
         ];
     }
 
@@ -728,5 +757,4 @@ final class ConfigTest extends TestCase
         yield [['aaa' => ['bbb' => ['ccc' => 'value']]], 'aaa', ['bbb' => ['ccc' => 'value']]];
         yield [['aaa' => ['bbb' => ['ccc' => 'value']]], 'aaa.ddd', null];
     }
-
 }

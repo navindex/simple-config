@@ -39,7 +39,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * Stores a key value.
+     * Saves a key value.
      *
      * @param string $key   Dot notation key
      * @param mixed  $value Config item value
@@ -104,7 +104,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * Probes a configuration key.
+     * Checks if a key exists and not null.
      *
      * @param string $key Dot notation key
      *
@@ -180,19 +180,22 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * Merge a config array into this one.
+     * Merges another config into this one.
      *
-     * @param mixed[]      $config Configuration array
-     * @param null|integer $type   Merge type
+     * @param null|mixed[]|\Navindex\SimpleConfig\Config $config Configuration array or class
+     * @param null|integer                               $method Merging method
      *
      * @return self
      */
-    public function merge(?array $config, ?int $type = null): self
+    public function merge($config, ?int $method = null): self
     {
-        $config = $config ?? [];
-        $type = $type ?? self::MERGE_REPLACE;
+        $config = ($config instanceof Config)
+            ? $config->toArray()
+            : $config ?? [];
 
-        if (self::MERGE_KEEP === $type) {
+        $method = $method ?? self::MERGE_REPLACE;
+
+        if (self::MERGE_KEEP === $method) {
             $base = $config;
             $replacement = $this->config;
         } else {
@@ -200,7 +203,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
             $replacement = $config;
         }
 
-        $this->config = $this->replace($base, $replacement, $type);
+        $this->config = $this->replace($base, $replacement, $method);
 
         return $this;
     }
@@ -210,27 +213,31 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      *
      * @param null|mixed $base
      * @param null|mixed $replacement
-     * @param integer    $type
+     * @param integer    $method
      *
      * @return mixed
      */
-    protected function replace($base, $replacement, int $type)
+    protected function replace($base, $replacement, int $method)
     {
+        if (empty($replacement)) {
+            return $base;
+        }
+
         if (!is_array($base) || !is_array($replacement) || !static::isAssoc($base) || !static::isAssoc($replacement)) {
-            return self::MERGE_APPEND === $type
+            return self::MERGE_APPEND === $method
                 ? array_unique(array_merge(static::wrap($base), static::wrap($replacement)))
                 : $replacement;
         }
 
         foreach (static::commonKeys($base, $replacement) as $key) {
-            $base[$key] = $this->replace($base[$key], $replacement[$key], $type);
+            $base[$key] = $this->replace($base[$key], $replacement[$key], $method);
         }
 
         return $base + $replacement;
     }
 
     /**
-     * Split a sub-array of configuration options into a new config.
+     * Splits a sub-array of configuration options into a new config.
      *
      * @param string $key Dot notation key
      *
@@ -301,6 +308,8 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
+     * Generates a storable representation of the configuration.
+     *
      * @return string|null
      */
     public function serialize(): ?string
@@ -309,6 +318,8 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
+     * Sets the configuration from a stored representation.
+     *
      * @param mixed $data
      *
      * @return void
@@ -320,12 +331,13 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
+     * Counts the config items.
      *
      * @return integer
      */
     public function count(): int
     {
-        return count($this->config);
+        return count($this->config, COUNT_RECURSIVE);
     }
 
     /**
@@ -345,7 +357,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * Tests if array is an associative array
+     * Tests if the array is associative.
      *
      * Note that this function will return false if an array is empty. Meaning
      * empty arrays will be treated as if they are not associative arrays.
@@ -360,7 +372,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * Returns the keys present in all arrays
+     * Returns the keys present in all arrays.
      *
      * @param mixed[] $array1
      * @param mixed[] $array2
