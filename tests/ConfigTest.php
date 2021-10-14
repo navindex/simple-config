@@ -17,9 +17,8 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerConfig
      *
-     * @param null|mixed[] $config
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testConstructor(?array $config, array $expected)
@@ -31,10 +30,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerSet
      *
-     * @param string     $key
-     * @param mixed|null $value
-     * @param mixed[]    $expected
-     *
+     * @param  string     $key
+     * @param  mixed|null $value
+     * @param  mixed[]    $expected
      * @return void
      */
     public function testSet(string $key, $value, array $expected)
@@ -46,10 +44,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerUnset
      *
-     * @param null|mixed[] $config
-     * @param string       $key
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  string       $key
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testUnset(?array $config, string $key, array $expected)
@@ -61,11 +58,10 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerGet
      *
-     * @param null|mixed[] $config
-     * @param string       $key
-     * @param null|mixed   $default
-     * @param null|mixed   $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  string       $key
+     * @param  null|mixed   $default
+     * @param  null|mixed   $expected
      * @return void
      */
     public function testGet(?array $config, string $key, $default, $expected)
@@ -77,10 +73,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerHas
      *
-     * @param null|mixed[] $config
-     * @param string       $key
-     * @param bool         $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  string       $key
+     * @param  bool         $expected
      * @return void
      */
     public function testHas(?array $config, string $key, bool $expected)
@@ -92,11 +87,10 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerAppend
      *
-     * @param null|mixed[] $config
-     * @param string       $key
-     * @param null|mixed   $value
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  string       $key
+     * @param  null|mixed   $value
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testAppend(?array $config, string $key, $value, array $expected)
@@ -108,11 +102,10 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerSubtract
      *
-     * @param null|mixed[] $config
-     * @param string       $key
-     * @param mixed|null   $value
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  string       $key
+     * @param  mixed|null   $value
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testSubtract(?array $config, string $key, $value, array $expected)
@@ -124,10 +117,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerMerge
      *
-     * @param null|mixed[]                               $config
-     * @param null|mixed[]|\Navindex\SimpleConfig\Config $merge
-     * @param mixed[]                                    $expected
-     *
+     * @param  null|mixed[]                               $config
+     * @param  null|mixed[]|\Navindex\SimpleConfig\Config $merge
+     * @param  mixed[]                                    $expected
      * @return void
      */
     public function testMerge(?array $config, $merge, array $expected)
@@ -139,10 +131,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerMerge
      *
-     * @param null|mixed[]                               $config
-     * @param null|mixed[]|\Navindex\SimpleConfig\Config $merge
-     * @param mixed[]                                    $expected
-     *
+     * @param  null|mixed[]                               $config
+     * @param  null|mixed[]|\Navindex\SimpleConfig\Config $merge
+     * @param  mixed[]                                    $expected
      * @return void
      */
     public function testMergeReplace(?array $config, $merge, array $expected)
@@ -154,10 +145,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerMergeKeep
      *
-     * @param null|mixed[] $config
-     * @param null|mixed[] $merge
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  null|mixed[] $merge
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testMergeKeep(?array $config, ?array $merge, array $expected)
@@ -169,10 +159,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerMergeAppend
      *
-     * @param null|mixed[] $config
-     * @param null|mixed[] $merge
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  null|mixed[] $merge
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testMergeAppend(?array $config, ?array $merge, array $expected)
@@ -184,10 +173,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerSplit
      *
-     * @param null|mixed[] $config
-     * @param string       $key
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  string       $key
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testSplit(?array $config, string $key, array $expected)
@@ -199,9 +187,8 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerCount
      *
-     * @param null|mixed[] $config
-     * @param integer      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  int          $expected
      * @return void
      */
     public function testCount(?array $config, int $expected)
@@ -213,9 +200,8 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerConfig
      *
-     * @param null|mixed[] $config
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testSerialize(?array $config, array $expected)
@@ -232,9 +218,8 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerConfig
      *
-     * @param null|mixed[] $config
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testIterator(?array $config, array $expected)
@@ -247,10 +232,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerSet
      *
-     * @param string     $key
-     * @param mixed|null $value
-     * @param mixed[]    $expected
-     *
+     * @param  string     $key
+     * @param  mixed|null $value
+     * @param  mixed[]    $expected
      * @return void
      */
     public function testArrayAccessSet(string $key, $value, array $expected)
@@ -263,10 +247,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerUnset
      *
-     * @param null|mixed[] $config
-     * @param string       $key
-     * @param mixed[]      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  string       $key
+     * @param  mixed[]      $expected
      * @return void
      */
     public function testArrayAccessUnset(?array $config, string $key, array $expected)
@@ -279,10 +262,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerArrayAccessGet
      *
-     * @param null|mixed[] $config
-     * @param string       $key
-     * @param null|mixed   $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  string       $key
+     * @param  null|mixed   $expected
      * @return void
      */
     public function testArrayAccessGet(?array $config, string $key, $expected)
@@ -294,10 +276,9 @@ final class ConfigTest extends TestCase
     /**
      * @dataProvider providerHas
      *
-     * @param null|mixed[] $config
-     * @param string       $key
-     * @param boolean      $expected
-     *
+     * @param  null|mixed[] $config
+     * @param  string       $key
+     * @param  bool         $expected
      * @return void
      */
     public function testArrayAccessExists(?array $config, string $key, bool $expected)

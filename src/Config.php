@@ -11,15 +11,20 @@ use Traversable;
 
 /**
  * Config class.
+ *
  * @implements \IteratorAggregate<int>
  * @implements \ArrayAccess<int,int>
  */
 class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 {
     const
-        MERGE_REPLACE = 1,  // Replace the original value (default)
-        MERGE_KEEP    = 2,  // Keep the original value
-        MERGE_APPEND  = 3;  // Append the new value and convert to array if necessary
+        MERGE_REPLACE = 1;
+    const
+        // Replace the original value (default)
+        MERGE_KEEP = 2;
+    const
+        // Keep the original value
+        MERGE_APPEND = 3;  // Append the new value and convert to array if necessary
 
     /**
      * Configuration settings.
@@ -41,9 +46,8 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Saves a key value.
      *
-     * @param string $key   Dot notation key
-     * @param mixed  $value Config item value
-     *
+     * @param  string $key   Dot notation key
+     * @param  mixed  $value Config item value
      * @return self
      */
     public function set(string $key, $value): self
@@ -58,11 +62,11 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 
         return $this;
     }
+
     /**
      * Completely removes a key.
      *
-     * @param string $key Dot notation key
-     *
+     * @param  string $key Dot notation key
      * @return self
      */
     public function unset(string $key): self
@@ -84,10 +88,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Retrieves a key value.
      *
-     * @param string     $key     Dot notation key
-     * @param mixed|null $default Default value
-     *
-     * @return mixed Value or default
+     * @param  string     $key     Dot notation key
+     * @param  mixed|null $default Default value
+     * @return mixed      Value or default
      */
     public function get(string $key, $default = null)
     {
@@ -106,9 +109,8 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Checks if a key exists and not null.
      *
-     * @param string $key Dot notation key
-     *
-     * @return boolean True if the key exists, false otherwise
+     * @param  string $key Dot notation key
+     * @return bool   True if the key exists, false otherwise
      */
     public function has(string $key): bool
     {
@@ -127,9 +129,8 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Appends value(s) to an array.
      *
-     * @param string        $key   Dot notation key
-     * @param mixed|mixed[] $value Value or values to append
-     *
+     * @param  string        $key   Dot notation key
+     * @param  mixed|mixed[] $value Value or values to append
      * @return self
      */
     public function append(string $key, $value): self
@@ -150,9 +151,8 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      *
      * Non-associative arrays will be re-indexed.
      *
-     * @param string        $key   Dot notation key
-     * @param mixed|mixed[] $value Value or values to remove
-     *
+     * @param  string        $key   Dot notation key
+     * @param  mixed|mixed[] $value Value or values to remove
      * @return self
      */
     public function subtract(string $key, $value): self
@@ -182,14 +182,13 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Merges another config into this one.
      *
-     * @param null|mixed[]|\Navindex\SimpleConfig\Config $config Configuration array or class
-     * @param null|integer                               $method Merging method
-     *
+     * @param  null|mixed[]|\Navindex\SimpleConfig\Config $config Configuration array or class
+     * @param  null|int                                   $method Merging method
      * @return self
      */
     public function merge($config, ?int $method = null): self
     {
-        $config = ($config instanceof Config)
+        $config = ($config instanceof self)
             ? $config->toArray()
             : $config ?? [];
 
@@ -211,10 +210,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Recursive value replacement.
      *
-     * @param null|mixed $base
-     * @param null|mixed $replacement
-     * @param integer    $method
-     *
+     * @param  null|mixed $base
+     * @param  null|mixed $replacement
+     * @param  int        $method
      * @return mixed
      */
     protected function replace($base, $replacement, int $method)
@@ -239,11 +237,10 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Splits a sub-array of configuration options into a new config.
      *
-     * @param string $key Dot notation key
-     *
+     * @param  string                        $key Dot notation key
      * @return \Navindex\SimpleConfig\Config
      */
-    public function split(string $key): Config
+    public function split(string $key): self
     {
         return new self($this->get($key));
     }
@@ -259,18 +256,16 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @param mixed $offset
-     *
-     * @return boolean
+     * @param  mixed $offset
+     * @return bool
      */
     public function offsetExists($offset): bool
     {
-        return $this->has((string)$offset);
+        return $this->has((string) $offset);
     }
 
     /**
-     * @param mixed $offset
-     *
+     * @param  mixed $offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -279,24 +274,22 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
-     *
+     * @param  mixed $offset
+     * @param  mixed $value
      * @return void
      */
     public function offsetSet($offset, $value): void
     {
-        $this->set((string)$offset, $value);
+        $this->set((string) $offset, $value);
     }
 
     /**
-     * @param mixed $offset
-     *
+     * @param  mixed $offset
      * @return void
      */
     public function offsetUnset($offset): void
     {
-        $this->unset((string)$offset);
+        $this->unset((string) $offset);
     }
 
     /**
@@ -320,8 +313,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Sets the configuration from a stored representation.
      *
-     * @param mixed $data
-     *
+     * @param  mixed $data
      * @return void
      */
     public function unserialize($data): void
@@ -333,7 +325,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Counts the config items.
      *
-     * @return integer
+     * @return int
      */
     public function count(): int
     {
@@ -343,8 +335,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * If the given value is not an array, wraps it in one.
      *
-     * @param mixed $value
-     *
+     * @param  mixed   $value
      * @return mixed[]
      */
     public static function wrap($value): array
@@ -362,9 +353,8 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      * Note that this function will return false if an array is empty. Meaning
      * empty arrays will be treated as if they are not associative arrays.
      *
-     * @param mixed[] $array
-     *
-     * @return boolean
+     * @param  mixed[] $array
+     * @return bool
      */
     public static function isAssoc(array $array): bool
     {
@@ -374,10 +364,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Returns the keys present in all arrays.
      *
-     * @param mixed[] $array1
-     * @param mixed[] $array2
-     * @param mixed[] ...$_
-     *
+     * @param  mixed[]  $array1
+     * @param  mixed[]  $array2
+     * @param  mixed[]  ...$_
      * @return string[]
      */
     public static function commonKeys(array $array1, array $array2, array ...$_): array
