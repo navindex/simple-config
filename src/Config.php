@@ -17,14 +17,14 @@ use Traversable;
  */
 class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 {
-    const
-        MERGE_REPLACE = 1;
-    const
-        // Replace the original value (default)
-        MERGE_KEEP = 2;
-    const
-        // Keep the original value
-        MERGE_APPEND = 3;  // Append the new value and convert to array if necessary
+    // Replace the original value (default)
+    const MERGE_REPLACE = 1;
+    
+    // Keep the original value
+    const MERGE_KEEP = 2;
+    
+    // Append the new value and convert to array if necessary
+    const MERGE_APPEND = 3;
 
     /**
      * Configuration settings.
