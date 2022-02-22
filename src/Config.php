@@ -242,7 +242,11 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      */
     public function split(string $key): self
     {
-        return new self($this->get($key));
+        $value = $this->get($key);
+        if (!is_array($value)) {
+            $value = [$value];
+        }
+        return new self($value);
     }
 
     /**
@@ -297,7 +301,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @return \Traversable <mixed, int>
+     * @return \Traversable <mixed, mixed>
      */
     public function getIterator(): Traversable
     {
@@ -314,8 +318,8 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         return serialize($this->config);
     }
 
-    /*
-     * @return array<string, mixed>
+    /**
+     * @return array<array-key, mixed>
      */
     public function __serialize(): array
     {
@@ -325,7 +329,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Sets the configuration from a stored representation.
      *
-     * @param  mixed $data
+     * @param  string $data
      * @return void
      */
     public function unserialize($data): void
@@ -335,7 +339,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @param  array<string, mixed> $data
+     * @param  array<string, bool|int|string> $data
      *
      * @return void
      */
