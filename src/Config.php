@@ -331,6 +331,12 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         $this->config = is_array($config) ? $config : [];
     }
 
+    /**
+     * Sets the configuration from a stored representation.
+     *
+     * @param  mixed $data
+     * @return void
+     */
     public function __unserialize($data): void
     {
         $this->unserialize($data);
