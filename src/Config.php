@@ -314,9 +314,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         return serialize($this->config);
     }
 
-    public function __serialize(): ?string
+    public function __serialize(): array
     {
-        return $this->serialize();
+        return $this->config;
     }
 
     /**
@@ -331,15 +331,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         $this->config = is_array($config) ? $config : [];
     }
 
-    /**
-     * Sets the configuration from a stored representation.
-     *
-     * @param  mixed $data
-     * @return void
-     */
-    public function __unserialize($data): void
+    public function __unserialize(array $data): void
     {
-        $this->unserialize($data);
+        $this->config = $data;
     }
 
     /**
