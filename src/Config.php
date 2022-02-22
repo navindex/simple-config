@@ -19,10 +19,10 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 {
     // Replace the original value (default)
     const MERGE_REPLACE = 1;
-    
+
     // Keep the original value
     const MERGE_KEEP = 2;
-    
+
     // Append the new value and convert to array if necessary
     const MERGE_APPEND = 3;
 
@@ -259,6 +259,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      * @param  mixed $offset
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset): bool
     {
         return $this->has((string) $offset);
@@ -268,6 +269,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      * @param  mixed $offset
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->get($offset);
@@ -278,6 +280,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      * @param  mixed $value
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         $this->set((string) $offset, $value);
@@ -287,6 +290,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      * @param  mixed $offset
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         $this->unset((string) $offset);
@@ -310,6 +314,11 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         return serialize($this->config);
     }
 
+    public function __serialize(): ?string
+    {
+        return $this->serialize();
+    }
+
     /**
      * Sets the configuration from a stored representation.
      *
@@ -320,6 +329,11 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     {
         $config = unserialize($data, ['allowed_classes' => false]);
         $this->config = is_array($config) ? $config : [];
+    }
+
+    public function __unserialize($data): void
+    {
+        $this->unserialize($data);
     }
 
     /**
