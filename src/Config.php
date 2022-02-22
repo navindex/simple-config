@@ -314,6 +314,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         return serialize($this->config);
     }
 
+    /*
+     * @return array<string, mixed>
+     */
     public function __serialize(): array
     {
         return $this->config;
