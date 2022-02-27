@@ -182,8 +182,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Merges another config into this one.
      *
-     * @param  null|mixed[]|\Navindex\SimpleConfig\Config $config Configuration array or class
-     * @param  null|int                                   $method Merging method
+     * @param  null|mixed[]|Config $config Configuration array or class
+     * @param  null|int            $method Merging method
+     *
      * @return self
      */
     public function merge($config, ?int $method = null): self
@@ -238,11 +239,12 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      * Splits a sub-array of configuration options into a new config.
      *
      * @param  string                        $key Dot notation key
-     * @return \Navindex\SimpleConfig\Config
+     *
+     * @return Config
      */
     public function split(string $key): self
     {
-        $value = $this->get($key);
+        $value = $this->get($key) ?? [];
         if (!is_array($value)) {
             $value = [$value];
         }
