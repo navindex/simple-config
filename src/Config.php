@@ -13,8 +13,8 @@ use Traversable;
 /**
  * Config class.
  *
- * @implements IteratorAggregate<int>
- * @implements ArrayAccess<string, mixed>
+ * @implements IteratorAggregate<string|int>
+ * @implements ArrayAccess<string|int, mixed>
  */
 class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 {
@@ -30,14 +30,14 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Configuration settings.
      *
-     * @var array<string, mixed>
+     * @var array<string|int, mixed>
      */
     protected $config = [];
 
     /**
      * Constructor.
      *
-     * @param null|array<string, mixed> $config Configuration array
+     * @param null|array<string|int, mixed> $config Configuration array
      */
     public function __construct(?array $config = null)
     {
@@ -152,7 +152,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 
         foreach (explode('.', $key) as $k) {
             /**
-             * @var array $config<string, mixed>
+             * @var array $config<string|int, mixed>
              */
             $config = &$config[$k];
         }
@@ -339,7 +339,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @return Traversable <string, mixed>
+     * @return Traversable <string|int, mixed>
      */
     public function getIterator(): Traversable
     {
