@@ -1,5 +1,11 @@
 parameters:
     level: max
+    checkMissingIterableValueType: false
     paths:
         - src
         - tests
+    ignoreErrors:
+        -
+            message: "#^Parameter \\#1 $data of method Navindex\\SimpleConfig\\Config::unserialize\\(\\) expects string, string|null given\\.$#"
+            count: 1
+            path: tests/ConfigTest.php

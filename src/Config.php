@@ -6,14 +6,15 @@ use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use RuntimeException;
 use Serializable;
 use Traversable;
 
 /**
  * Config class.
  *
- * @implements \IteratorAggregate<int>
- * @implements \ArrayAccess<int,int>
+ * @implements IteratorAggregate<int>
+ * @implements ArrayAccess<string, mixed>
  */
 class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 {
@@ -29,14 +30,14 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Configuration settings.
      *
-     * @var mixed[]
+     * @var array<string, mixed>
      */
     protected $config = [];
 
     /**
      * Constructor.
      *
-     * @param null|mixed[] $config Configuration array
+     * @param null|array<string, mixed> $config Configuration array
      */
     public function __construct(?array $config = null)
     {
@@ -54,7 +55,13 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     {
         $config = &$this->config;
 
+        /**
+         * @var string $k
+         */
         foreach (explode('.', $key) as $k) {
+            /**
+             * @var array $config<string, mixed>
+             */
             $config = &$config[$k];
         }
 
@@ -74,7 +81,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         $config = &$this->config;
 
         foreach (explode('.', $key) as $k) {
-            if (!isset($config[$k])) {
+            if (!is_array($config) || !isset($config[$k])) {
                 return $this;
             }
             $config = &$config[$k];
@@ -97,6 +104,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         $config = $this->config;
 
         foreach (explode('.', $key) as $k) {
+            if (!is_array($config)) {
+                throw new RuntimeException("Config does not have key of `". $key . "` set.");
+            }
             if (!isset($config[$k])) {
                 return $default;
             }
@@ -116,8 +126,11 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     {
         $config = $this->config;
 
+        /**
+         * @var string $k
+         */
         foreach (explode('.', $key) as $k) {
-            if (!isset($config[$k])) {
+            if (!is_array($config) || !isset($config[$k])) {
                 return false;
             }
             $config = $config[$k];
@@ -138,6 +151,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         $config = &$this->config;
 
         foreach (explode('.', $key) as $k) {
+            /**
+             * @var array $config<string, mixed>
+             */
             $config = &$config[$k];
         }
 
@@ -160,6 +176,9 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         $config = &$this->config;
 
         foreach (explode('.', $key) as $k) {
+            if (!is_array($config)) {
+                throw new RuntimeException("Config does not have key of `". $key . "` set.");
+            }
             if (!isset($config[$k])) {
                 return $this;
             }
@@ -182,7 +201,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Merges another config into this one.
      *
-     * @param  null|mixed[]|Config $config Configuration array or class
+     * @param  null|Config|array<string, mixed> $config Configuration array or class
      * @param  null|int            $method Merging method
      *
      * @return self
@@ -203,7 +222,11 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
             $replacement = $config;
         }
 
-        $this->config = $this->replace($base, $replacement, $method);
+        $replaced = $this->replace($base, $replacement, $method) ?? [];
+        if (!is_array($replaced)) {
+            $replaced = [$replaced];
+        }
+        $this->config = $replaced;
 
         return $this;
     }
@@ -211,28 +234,41 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Recursive value replacement.
      *
-     * @param  null|mixed $base
-     * @param  null|mixed $replacement
+     * @param  null|array<string, mixed>|mixed $base
+     * @param  null|array<string, mixed>|mixed $replacement
      * @param  int        $method
-     * @return mixed
+     * @return null|array<string, mixed>|mixed
      */
     protected function replace($base, $replacement, int $method)
     {
         if (empty($replacement)) {
+            if (!is_array($base) || !static::isAssoc($base)) {
+                return static::wrap($base);
+            }
             return $base;
         }
 
-        if (!is_array($base) || !is_array($replacement) || !static::isAssoc($base) || !static::isAssoc($replacement)) {
-            return self::MERGE_APPEND === $method
-                ? array_unique(array_merge(static::wrap($base), static::wrap($replacement)))
-                : $replacement;
+        if (!is_array($base) || !static::isAssoc($base) || !is_array($replacement)  || !static::isAssoc($replacement)) {
+            if (self::MERGE_APPEND === $method) {
+                return array_unique(array_merge(static::wrap($base), static::wrap($replacement)));
+            }
+
+            return $replacement;
         }
 
         foreach (static::commonKeys($base, $replacement) as $key) {
             $base[$key] = $this->replace($base[$key], $replacement[$key], $method);
         }
 
-        return $base + $replacement;
+        $merge = $base + $replacement;
+        if (!is_array($merge) || !static::isAssoc($merge)) {
+            return static::wrap($merge);
+        }
+
+        /**
+         * @var array<string, mixed> $merge
+         */
+        return $merge;
     }
 
     /**
@@ -262,7 +298,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @param  mixed $offset
+     * @param  string $offset
      * @return bool
      */
     #[\ReturnTypeWillChange]
@@ -272,7 +308,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @param  mixed $offset
+     * @param  string $offset
      * @return mixed
      */
     #[\ReturnTypeWillChange]
@@ -282,7 +318,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @param  mixed $offset
+     * @param  string $offset
      * @param  mixed $value
      * @return void
      */
@@ -293,7 +329,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @param  mixed $offset
+     * @param  string $offset
      * @return void
      */
     #[\ReturnTypeWillChange]
