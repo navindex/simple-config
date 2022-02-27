@@ -105,7 +105,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 
         foreach (explode('.', $key) as $k) {
             if (!is_array($config)) {
-                throw new RuntimeException("Config does not have key of `". $key . "` set.");
+                throw new RuntimeException('Config does not have key of `' . $key . '` set.');
             }
             if (!isset($config[$k])) {
                 return $default;
@@ -177,7 +177,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 
         foreach (explode('.', $key) as $k) {
             if (!is_array($config)) {
-                throw new RuntimeException("Config does not have key of `". $key . "` set.");
+                throw new RuntimeException('Config does not have key of `' . $key . '` set.');
             }
             if (!isset($config[$k])) {
                 return $this;
@@ -202,8 +202,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      * Merges another config into this one.
      *
      * @param  null|Config|array<string, mixed> $config Configuration array or class
-     * @param  null|int            $method Merging method
-     *
+     * @param  null|int                         $method Merging method
      * @return self
      */
     public function merge($config, ?int $method = null): self
@@ -236,7 +235,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
      *
      * @param  null|array<string, mixed>|mixed $base
      * @param  null|array<string, mixed>|mixed $replacement
-     * @param  int        $method
+     * @param  int                             $method
      * @return null|array<string, mixed>|mixed
      */
     protected function replace($base, $replacement, int $method)
@@ -245,10 +244,11 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
             if (!is_array($base) || !static::isAssoc($base)) {
                 return static::wrap($base);
             }
+
             return $base;
         }
 
-        if (!is_array($base) || !static::isAssoc($base) || !is_array($replacement)  || !static::isAssoc($replacement)) {
+        if (!is_array($base) || !static::isAssoc($base) || !is_array($replacement) || !static::isAssoc($replacement)) {
             if (self::MERGE_APPEND === $method) {
                 return array_unique(array_merge(static::wrap($base), static::wrap($replacement)));
             }
@@ -274,8 +274,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     /**
      * Splits a sub-array of configuration options into a new config.
      *
-     * @param  string                        $key Dot notation key
-     *
+     * @param  string $key Dot notation key
      * @return Config
      */
     public function split(string $key): self
@@ -284,6 +283,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
         if (!is_array($value)) {
             $value = [$value];
         }
+
         return new self($value);
     }
 
@@ -319,7 +319,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 
     /**
      * @param  string $offset
-     * @param  mixed $value
+     * @param  mixed  $value
      * @return void
      */
     #[\ReturnTypeWillChange]
@@ -378,7 +378,6 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
 
     /**
      * @param  array<string, bool|int|string> $data
-     *
      * @return void
      */
     public function __unserialize(array $data): void
