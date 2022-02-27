@@ -339,7 +339,7 @@ class Config implements ArrayAccess, IteratorAggregate, Serializable, Countable
     }
 
     /**
-     * @return \Traversable <mixed, mixed>
+     * @return Traversable <string, mixed>
      */
     public function getIterator(): Traversable
     {
